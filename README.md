@@ -10,4 +10,8 @@ This document is used as the structure for the network. It contains the below ca
 
 _main.py_ - This file is the primary script for generating the virtual network. It pulls the structure from _network_toplogy.yml_. It contains the following classes:
 - main()
-- deploy_network()
+- populate_dict()
+- build_network(topology)
+- add_routes(topology)
+- configure_nat()
+- build_network(topology)
