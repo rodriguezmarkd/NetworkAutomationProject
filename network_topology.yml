@@ -1,0 +1,133 @@
+---
+subnets: 
+  - name: "purple"
+    network: "10.1.1.0/24"
+    bridge: yes
+    bridge_name: "pbridge"
+    router_name: "prouter"
+    host_name: "phost"
+    gw: "10.1.1.1"
+    route: "10.1.5.2"
+    dhcp_range: "10.1.1.21,10.1.1.150"
+
+  - name: "orange"
+    network: "10.1.4.0/24"
+    bridge: yes
+    bridge_name: "obridge"
+    router_name: "orouter"
+    host_name: "ohost"
+    gw: "10.1.4.1"
+    route: "10.1.5.14"
+    dhcp_range: "10.1.4.21,10.1.4.150"
+
+  - name: "yellow"
+    network: "10.1.2.0/24"
+    bridge: yes
+    bridge_name: "ybridge"
+    router_name: "yrouter"
+    host_name: "yhost"
+    gw: "10.1.2.1"
+    route: "10.1.5.6"
+    dhcp_range: "10.1.2.21,10.1.2.150"
+
+  - name: "white"
+    network: "10.1.3.0/24"
+    bridge: yes
+    bridge_name: "wbridge"
+    router_name: "wrouter"
+    host_name: "whost"
+    gw: "10.1.3.1"
+    route: "10.1.5.10"
+    dhcp_range: "10.1.3.21,10.1.3.150"
+
+routers:
+  - name: "prouter"
+    interfaces:
+      - name: "prouter2core"
+        ip: "10.1.5.2/30"
+        subnet: ""
+        peer: "core2prouter"
+      - name: "prouter2pbridge"
+        ip: "10.1.1.1/24"
+        peer: null
+    nexthop: "10.1.5.1"
+    ds_bridge: "pbridge"
+
+  - name: "orouter"
+    interfaces:
+      - name: "orouter2core"
+        ip: "10.1.5.14/30"
+        peer: "core2orouter"
+      - name: "orouter2obridge"
+        ip: "10.1.4.1/24"
+        peer: null
+    nexthop: "10.1.5.13"
+    ds_bridge: "obridge"
+
+  - name: "yrouter"
+    interfaces:
+      - name: "yrouter2core"
+        ip: "10.1.5.6/30"
+        peer: "core2yrouter"
+      - name: "yrouter2ybridge"
+        ip: "10.1.2.1/24"
+        peer: null
+    nexthop: "10.1.5.5"
+    ds_bridge: "ybridge"
+
+  - name: "wrouter"
+    interfaces:
+      - name: "wrouter2core"
+        ip: "10.1.5.10/30"
+        peer: "core2wrouter"
+      - name: "wrouter2wbridge"
+        ip: "10.1.3.1/24"
+        peer: null
+    nexthop: "10.1.5.9"
+    ds_bridge: "wbridge"
+
+  - name: "core"
+    interfaces:
+      - name: "core2prouter"
+        ip: "10.1.5.1/30"
+        peer: "prouter"
+      - name: "core2orouter"
+        ip: "10.1.5.13/30"
+        peer: "orouter"
+      - name: "core2yrouter"
+        ip: "10.1.5.5/30"
+        peer: "yrouter"
+      - name: "core2wrouter"
+        ip: "10.1.5.9/30"
+        peer: "wrouter"
+    nexthop: "10.1.5.18"
+    ds_bridge: null
+
+hosts:
+  - name: "phost"
+    if_name: "phost2pbrg"
+    ip: "10.1.1.21/24"
+    subnets: "purple"
+    bridge: "pbridge"
+    default: "10.1.1.1"
+
+  - name: "ohost"
+    if_name: "ohost2obrg"
+    ip: "10.1.4.21/24"
+    subnets: "orange"
+    bridge: "obridge"
+    default: "10.1.4.1"
+
+  - name: "yhost"
+    if_name: "yhost2ybrg"
+    ip: "10.1.2.21/24"
+    subnets: "yellow"
+    bridge: "ybridge"
+    default: "10.1.2.1"
+    
+  - name: "whost"
+    if_name: "whostwobrg"
+    ip: "10.1.3.21/24"
+    subnets: "white"
+    bridge: "wbridge"
+    default: "10.1.3.1"

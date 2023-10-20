@@ -1,0 +1,27 @@
+---
+- name: Testing network ping functionality
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    hosts:
+      - yhost
+      - phost
+      - ohost
+      - whost
+
+  tasks:
+  - name: Pinging Outward
+    raw: "sudo ip netns exec {{ item }} ping -c 2 8.8.8.8"
+    register: result
+    loop: "{{ hosts }}"
+
+  - name: Show results
+    debug:
+        var: result
+
+  - name: Outputting results to file...
+    ansible.builtin.copy:
+      content: result
+      dest: networktestsresults.log
