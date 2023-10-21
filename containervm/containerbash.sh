@@ -37,6 +37,12 @@ sudo mkdir -p /var/kvm/images
 
 sudo chown student:student /var/kvm/images
 
+cp net-config-1.yaml /var/kvm/images/
+
+cp net-config-2.yaml /var/kvm/images/
+
+cp user-data.yaml /var/kvm/images/
+
 cd /var/kvm/images/
 
 wget https://static.alta3.com/projects/kvm/bionic-server-cloudimg-amd64.img
