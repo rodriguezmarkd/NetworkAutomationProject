@@ -1,0 +1,14 @@
+#cloud-config
+users:
+  - name: root
+    lock_passwd: false
+    plain_text_passwd: 'alta3'
+    shell: /bin/bash
+  - name: ubuntu
+    lock_passwd: false
+    plain_text_passwd: 'alta3'
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    groups: sudo
+    ssh-authorized-keys:
+    - ssh-rsa $KEY1
