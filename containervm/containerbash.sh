@@ -62,10 +62,10 @@ echo $KEY1
 cd /var/kvm/images
 
 echo 'instance-id: sdn-1-test
-local-hostname:sdn-1-test = 1' | sudo tee meta-data-1.yaml
+local-hostname:sdn-1-test' | sudo tee meta-data-1.yaml
 
 echo 'instance-id: sdn-2-test
-local-hostname:sdn-2-test = 1' | sudo tee meta-data-2.yaml
+local-hostname:sdn-2-test' | sudo tee meta-data-2.yaml
 
 cloud-localds cloud-init-1.iso user-data.yaml meta-data-1.yaml --network-config=net-config-1.yaml
 
