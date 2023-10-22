@@ -19,8 +19,8 @@ def build_network(topology):
     for hosts in topology['hosts']:
         print(f"Deleting {hosts['name']} namespace and associated links...")
         subprocess.call(['sudo','ip','netns','delete',hosts['name']])
-        subprocess.call(['sudo','ip','link','del',hosts['name'] + '2' + hosts['name'] + 'brdg','type','veth','peer','name',hosts['name'] + 'brdg' + '2' + hosts['name']])
-        subprocess.call(['sudo','ip','link','del',hosts['name'] + 'brdg' + '2' + hosts['name']])
+        #subprocess.call(['sudo','ip','link','del',hosts['name'] + '2' + hosts['name'] + 'brdg','type','veth','peer','name',hosts['name'] + 'brdg' + '2' + hosts['name']])
+        #subprocess.call(['sudo','ip','link','del',hosts['name'] + 'brdg' + '2' + hosts['name']])
     for bridges in topology['subnets']:
         if bridges['bridge'] == True:
             print(f"Deleting {bridges['bridge_name']}brdg...")

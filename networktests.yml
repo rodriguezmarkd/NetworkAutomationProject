@@ -5,7 +5,7 @@
   gather_facts: false
 
   vars:
-    hosts:
+    hostnames:
       - yhost
       - phost
       - ohost
@@ -13,9 +13,19 @@
 
   tasks:
   - name: Pinging Outward
+    raw: "sudo ip netns exec {{ item }} ip -c link | grep -A 2 {{ item }}"
+    register: result
+    loop: "{{ hostnames }}"
+
+  - name: Pinging Outward
     raw: "sudo ip netns exec {{ item }} ping -c 2 8.8.8.8"
     register: result
-    loop: "{{ hosts }}"
+    loop: "{{ hostnames }}"
+
+  - name: Pinging from hosts to core router
+    raw: "sudo ip netns exec {{ item }} ping -c 2 10.1.5.17"
+    register: result
+    loop: "{{ hostnames }}"
 
   - name: Show results
     debug:
@@ -23,5 +33,5 @@
 
   - name: Outputting results to file...
     ansible.builtin.copy:
-      content: result
+      content: "{{ result }}"
       dest: networktestsresults.log
