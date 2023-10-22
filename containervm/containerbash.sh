@@ -79,18 +79,18 @@ sudo /sbin/iptables -A FORWARD -i br0 -o ens3 -j ACCEPT
 
 mkdir -p /var/log/qemu/
 
-sudo /usr/bin/qemu-system-x86_64 \
-   -enable-kvm \
-   -drive file=/var/kvm/images/bionic-server-cloudimg-amd64.img,if=virtio \
-   -cdrom /var/kvm/images/cloud-init-1.iso \
-   -display curses \
-   -nographic \
-   -smp cpus=1 \
-   -m 1G \
-   -net nic,netdev=tap1,macaddr=$MAC1 \
-   -netdev bridge,id=tap1,br=br0\
-   -d int \
-   -D /var/log/qemu/qemu-1.log    
+#sudo /usr/bin/qemu-system-x86_64 \
+#   -enable-kvm \
+#   -drive file=/var/kvm/images/bionic-server-cloudimg-amd64.img,if=virtio \
+#   -cdrom /var/kvm/images/cloud-init-1.iso \
+#   -display curses \
+#   -nographic \
+#   -smp cpus=1 \
+#   -m 1G \
+#   -net nic,netdev=tap1,macaddr=$MAC1 \
+#   -netdev bridge,id=tap1,br=br0\
+#   -d int \
+#   -D /var/log/qemu/qemu-1.log    
 
 sudo /usr/bin/qemu-system-x86_64 \
    -enable-kvm \
