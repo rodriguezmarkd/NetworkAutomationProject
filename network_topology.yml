@@ -1,4 +1,10 @@
 ---
+# YAML file to structure the network topology deployed in the main.py file
+# Structure is broken down into the following:
+# - subnets: Overall subnets listing contents and configurations for that network
+# - routers: Inventory of routers, their next hops and interfaces
+# - hosts: Inventory of hosts and their configurations
+
 subnets: 
   - name: "purple"
     network: "10.1.1.0/24"
