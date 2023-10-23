@@ -12,7 +12,7 @@
       - whost
 
   tasks:
-  - name: Pinging Outward
+  - name: IP Configuration Readout from Each Host
     raw: "sudo ip netns exec {{ item }} ip -c link | grep -A 2 {{ item }}"
     register: result
     loop: "{{ hostnames }}"
