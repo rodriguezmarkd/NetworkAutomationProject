@@ -10,7 +10,7 @@ def populate_dict():
     return topology
     
 
-def build_network(topology):
+def strike_network(topology):
     print("Tearing down namespaces...")
     for routers in topology['routers']:
         #print(type(routers))
@@ -27,7 +27,7 @@ def build_network(topology):
             subprocess.call(['sudo','ip','link','delete',bridges['bridge_name']])
 def main():
     network_topology = populate_dict()
-    build_network(network_topology)
+    strike_network(network_topology)
     #print(network_topology)
     subprocess.call(['sudo','ip','netns'])
 

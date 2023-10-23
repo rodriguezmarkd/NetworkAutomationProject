@@ -30,3 +30,6 @@ _networktests.yml_ - This is an ansible script that performs end-to-end testing 
 - "Outputting results to file..." - This task creates the log file
 
 _teardown.py_ - This script deactivates the virtual network
+- main() - Calls build_network function
+- populate_dict() - Creates topology dictionary using network_topology.yml
+- strike_network(topology) - Takes the dictionary created from the network_topology.yml file, and deletes associated nodes.
