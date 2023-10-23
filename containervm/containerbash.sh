@@ -31,7 +31,7 @@ sudo ip link set br0 up
 
 ip link show
 
-brctl show 
+brctl show
 
 sudo mkdir -p /var/kvm/images
 
@@ -53,13 +53,21 @@ qemu-img info bionic-server-cloudimg-amd64.img
 
 qemu-img convert -O qcow2 /var/kvm/images/bionic-server-cloudimg-amd64.img /var/kvm/images/beachhead.img
 
+cp /var/kvm/images/beachhead.img /var/kvm/images/beachhead2.img
+
 sudo mkdir /var/log/qemu
+
+export KEY1="$(cat ~/.ssh/id_rsa.pub)"
 
 MAC=$(printf "aa:a3:a3:%02x:%02x:%02x\n" $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256)))
 
-echo $KEY1
+MAC2=$(printf "aa:a3:a3:%02x:%02x:%02x\n" $((RANDOM%256)) $((RANDOM%256)) $((RANDOM%256)))
+
+#echo $KEY1
 
 cd /var/kvm/images
+
+sudo apt-get install cloud-image-utils
 
 echo 'instance-id: sdn-1-test
 local-hostname:sdn-1-test' | sudo tee meta-data-1.yaml
@@ -73,34 +81,42 @@ cloud-localds cloud-init-2.iso user-data.yaml meta-data-2.yaml --network-config=
 
 sudo /sbin/iptables -t nat -A POSTROUTING -o ens3 -j MASQUERADE
 
+sudo /sbin/iptables -A FORWARD -i ens3 -o pbridge -m state  --state RELATED,ESTABLISHED -j ACCEPT
+
+sudo /sbin/iptables -A FORWARD -i pbridge -o ens3 -j ACCEPT
+
+sudo /sbin/iptables -A FORWARD -i ens3 -o obridge -m state  --state RELATED,ESTABLISHED -j ACCEPT
+
+sudo /sbin/iptables -A FORWARD -i obridge -o ens3 -j ACCEPT
+
 sudo /sbin/iptables -A FORWARD -i ens3 -o br0 -m state  --state RELATED,ESTABLISHED -j ACCEPT
 
 sudo /sbin/iptables -A FORWARD -i br0 -o ens3 -j ACCEPT
 
 mkdir -p /var/log/qemu/
 
-#sudo /usr/bin/qemu-system-x86_64 \
-#   -enable-kvm \
-#   -drive file=/var/kvm/images/bionic-server-cloudimg-amd64.img,if=virtio \
-#   -cdrom /var/kvm/images/cloud-init-1.iso \
-#   -display curses \
-#   -nographic \
-#   -smp cpus=1 \
-#   -m 1G \
-#   -net nic,netdev=tap1,macaddr=$MAC1 \
-#   -netdev bridge,id=tap1,br=br0\
-#   -d int \
-#   -D /var/log/qemu/qemu-1.log    
-
 sudo /usr/bin/qemu-system-x86_64 \
    -enable-kvm \
-   -drive file=/var/kvm/images/bionic-server-cloudimg-amd64.img,if=virtio \
-   -cdrom /var/kvm/images/cloud-init-2.iso \
+   -drive file=/var/kvm/images/beachhead.img,if=virtio \
+   -cdrom /var/kvm/images/cloud-init-1.iso \
    -display curses \
    -nographic \
    -smp cpus=1 \
    -m 1G \
    -net nic,netdev=tap1,macaddr=$MAC1 \
-   -netdev bridge,id=tap1,br=br0\
+   -netdev bridge,id=tap1,br=pbridge\
    -d int \
-   -D /var/log/qemu/qemu-2.log    
+   -D /var/log/qemu/qemu-1.log &
+
+sudo /usr/bin/qemu-system-x86_64 \
+   -enable-kvm \
+   -drive file=/var/kvm/images/beachhead2.img,if=virtio \
+   -cdrom /var/kvm/images/cloud-init-2.iso \
+   -display curses \
+   -nographic \
+   -smp cpus=1 \
+   -m 1G \
+   -net nic,netdev=tap2,macaddr=$MAC2 \
+   -netdev bridge,id=tap2,br=obridge\
+   -d int \
+   -D /var/log/qemu/qemu-2.log &
