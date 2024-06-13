@@ -1,5 +1,5 @@
 # Network Automation Project
-This is a repository for the capstone project by Ming Xia and Mark Rodriguez.
+This Project was utilized as a capstone for a Network Automation Course. The overall goal was to leverage python to create a virtual network as defined in a yaml file, with validation tests to ensure all nodes are pingable.
 
 ## Topology
 <img width="662" alt="image" src="https://github.com/rodriguezmarkd/NetworkAutomationProject/assets/91779224/a8132ae7-f7e0-42ec-be3a-417bbaf5d851">
